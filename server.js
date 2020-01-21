@@ -21,6 +21,13 @@ const addName = async (firstName, lastName, age) => {
     return res;
 };
 
+const getNames = async () => {
+    return await database
+        .get('persons')
+        .map('firstName')
+        .value();
+};
+
 app.post('/api/addName', async (req, res) => {
     const firstName = req.query.firstName;
     const lastName = req.query.lastName;
@@ -33,6 +40,11 @@ app.post('/api/addName', async (req, res) => {
     const result = await addName(firstName, lastName, age);
     message.data = result;
     res.send(message);
+});
+
+app.get('/api/getNames', async (req, res) => {
+    const data = await getNames();
+    res.send(data);
 });
 
 app.listen(PORT, () => {
