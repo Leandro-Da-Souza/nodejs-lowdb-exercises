@@ -1,3 +1,4 @@
 lowdb-example/node_modules/*
 .DS_Store
 lowdb-example/database.json
+node_modules
