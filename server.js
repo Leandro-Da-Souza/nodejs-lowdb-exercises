@@ -13,6 +13,7 @@ const databaseInit = () => {
     }
 };
 
+// FUNCTIONS
 const addName = async (firstName, lastName, age) => {
     const res = await database
         .get('persons')
@@ -36,6 +37,15 @@ const getName = async i => {
     }
 };
 
+const getAges = async () => {
+    const res = await database
+        .get('persons')
+        .map('age')
+        .value();
+    return res;
+};
+
+// ROUTES
 app.post('/api/addName', async (req, res) => {
     const firstName = req.query.firstName;
     const lastName = req.query.lastName;
@@ -59,6 +69,19 @@ app.get('/api/thirdName', async (req, res) => {
     const data = await getName(2);
     res.send(data);
 });
+
+app.get('/api/sumAge', async (req, res) => {
+    const data = await getAges();
+    let num = data.map(int => {
+        return parseInt(int);
+    });
+    let sum = num.reduce((a, b) => {
+        return a + b;
+    });
+    res.send(sum.toString());
+});
+
+// LISTEN TO SERVER
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}...`);
     databaseInit();
