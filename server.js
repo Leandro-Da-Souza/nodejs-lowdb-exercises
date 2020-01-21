@@ -28,6 +28,14 @@ const getNames = async () => {
         .value();
 };
 
+const getName = async i => {
+    if (database.has('persons').value().length !== -1) {
+        return await database.get(`persons[${i}]`).value();
+    } else {
+        return 'Not enough names in database';
+    }
+};
+
 app.post('/api/addName', async (req, res) => {
     const firstName = req.query.firstName;
     const lastName = req.query.lastName;
@@ -47,6 +55,10 @@ app.get('/api/getNames', async (req, res) => {
     res.send(data);
 });
 
+app.get('/api/thirdName', async (req, res) => {
+    const data = await getName(2);
+    res.send(data);
+});
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}...`);
     databaseInit();
