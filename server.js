@@ -12,6 +12,29 @@ const databaseInit = () => {
         database.defaults({ persons: [] }).write();
     }
 };
+
+const addName = async (firstName, lastName, age) => {
+    const res = await database
+        .get('persons')
+        .push({ firstName, lastName, age })
+        .write();
+    return res;
+};
+
+app.post('/api/addName', async (req, res) => {
+    const firstName = req.query.firstName;
+    const lastName = req.query.lastName;
+    const age = req.query.age;
+
+    let message = {
+        success: true,
+        message: 'Person added'
+    };
+    const result = await addName(firstName, lastName, age);
+    message.data = result;
+    res.send(message);
+});
+
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}...`);
     databaseInit();
