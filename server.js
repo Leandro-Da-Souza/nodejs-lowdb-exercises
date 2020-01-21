@@ -45,6 +45,26 @@ const getAges = async () => {
     return res;
 };
 
+const convertAge = data => {
+    let num = data.map(int => {
+        return parseInt(int);
+    });
+    let sum = num.reduce((a, b) => {
+        return a + b;
+    });
+
+    return sum;
+};
+
+const changeName = async (i, newName) => {
+    let name = await getName(i).firstName;
+    return await database
+        .get('persons')
+        .find({ firstName: name })
+        .assign({ firstName: newName })
+        .write();
+};
+
 // ROUTES
 app.post('/api/addName', async (req, res) => {
     const firstName = req.query.firstName;
@@ -72,13 +92,16 @@ app.get('/api/thirdName', async (req, res) => {
 
 app.get('/api/sumAge', async (req, res) => {
     const data = await getAges();
-    let num = data.map(int => {
-        return parseInt(int);
-    });
-    let sum = num.reduce((a, b) => {
-        return a + b;
-    });
+    let sum = convertAge(data);
     res.send(sum.toString());
+});
+
+app.post('/api/changeName', async (req, res) => {
+    let index = req.query.index;
+    let newName = req.query.newName;
+
+    let data = await changeName(index, newName);
+    res.send(data);
 });
 
 // LISTEN TO SERVER
