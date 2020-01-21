@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-lowdb-exercises",
+  "version": "1.0.0",
+  "description": "## Instruktioner",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leandro-Da-Souza/nodejs-lowdb-exercises.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Leandro-Da-Souza/nodejs-lowdb-exercises/issues"
+  },
+  "homepage": "https://github.com/Leandro-Da-Souza/nodejs-lowdb-exercises#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "lowdb": "^1.0.0"
+  }
+}
