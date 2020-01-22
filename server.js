@@ -4,6 +4,7 @@ const app = express();
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('names.json');
 const database = lowdb(adapter);
+const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 8080;
 
 const databaseInit = () => {
@@ -12,6 +13,17 @@ const databaseInit = () => {
         database.defaults({ persons: [] }).write();
     }
 };
+
+// MIDDLEWARE
+app.use(express.static('public'));
+
+app.use(bodyParser.json());
+
+app.use(
+    bodyParser.urlencoded({
+        extended: true
+    })
+);
 
 // FUNCTIONS
 const addName = async (firstName, lastName, age) => {
@@ -57,12 +69,15 @@ const convertAge = data => {
 };
 
 const changeName = async (i, newName) => {
-    let name = await getName(i).firstName;
-    return await database
+    let name = await database.get(`persons[${i}]`).value().firstName;
+    console.log(name);
+    let newData = await database
         .get('persons')
         .find({ firstName: name })
         .assign({ firstName: newName })
         .write();
+
+    return newData;
 };
 
 // ROUTES
@@ -96,11 +111,12 @@ app.get('/api/sumAge', async (req, res) => {
     res.send(sum.toString());
 });
 
-app.post('/api/changeName', async (req, res) => {
+app.put('/api/changeName', async (req, res) => {
     let index = req.query.index;
     let newName = req.query.newName;
 
     let data = await changeName(index, newName);
+
     res.send(data);
 });
 
